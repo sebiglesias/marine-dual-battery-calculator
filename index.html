@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boat Dual Battery & ACR Isolator Calculator — Starting vs House Bank — Accurate Material Estimator</title>
+  <meta name="description" content="Calculate boat dual-battery bank capacity: engine cranking amps (CCA), house deep cycle loads (electronics/bilge pump), and ACR isolators.">
+  <link rel="canonical" href="https://sebiglesias.com.ar/marine-dual-battery-calculator/">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Boat Dual Battery & ACR Isolator Calculator — Starting vs House Bank">
+  <meta property="og:description" content="Calculate boat dual-battery bank capacity: engine cranking amps (CCA), house deep cycle loads (electronics/bilge pump), and ACR isolators.">
+  <meta property="og:url" content="https://sebiglesias.com.ar/marine-dual-battery-calculator/">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BNDBQP0W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2BNDBQP0W7');
+  </script>
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-3381238987477190">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3381238987477190" crossorigin="anonymous"></script>
+
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Boat Dual Battery & ACR Isolator Calculator \u2014 Starting vs House Bank",
+    "url": "https://sebiglesias.com.ar/marine-dual-battery-calculator/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "description": "Calculate boat dual-battery bank capacity: engine cranking amps (CCA), house deep cycle loads (electronics/bilge pump), and ACR isolators.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is an Automatic Charging Relay (ACR) on a boat?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An ACR connects your starting battery and house battery together automatically whenever the outboard alternator is charging (over 13.0V). When the engine is turned off and voltage drops, the ACR immediately disconnects the two banks, preventing stereos and chartplotters from ever draining your engine starting battery."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why can't I use a standard deep-cycle battery to start my outboard engine?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Deep-cycle batteries have thick lead plates designed for slow, continuous power over many hours. Starting an outboard engine requires an instantaneous surge of 500 to 1,000 cold cranking amps. Using a deep cycle battery for starting causes severe voltage sag and can damage sensitive outboard starter motors."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is marine tinned copper wire required over standard automotive wire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Automotive wire uses bare copper strands. In salty humid marine air, moisture wicks beneath the insulation, turning the copper green with verdigris corrosion within months. ABYC compliant marine wire has individually electro-tinned copper strands that resist salt oxidation indefinitely."
+        }
+      }
+    ]
+  }
+]
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">⚓ ABYC Marine Electrical Standards</div>
+      <h1>Boat Dual Battery & Automatic Charging Relay Calculator</h1>
+      <p class="subtitle">Calculate outboard engine cranking amps (CCA), house deep cycle amp-hours (Ah), and ACR charging relay isolation.</p>
+    </header>
+
+    <!-- AdSense Top Banner -->
+    <div style="text-align:center; margin: 16px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3381238987477190"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="calc-grid">
+      <!-- Inputs Card -->
+      <form class="card" id="marine-dual-battery-calculator-form" onsubmit="event.preventDefault();">
+        <h2>📐 Outboard Engine & Marine Electronics</h2>
+        
+        <div class="input-row">
+          <div class="form-group">
+            <label for="engineHp">Outboard Engine Size</label>
+            <select id="engineHp">
+              <option value="500">25–90 HP (Small Skiff / Bass Boat)</option>
+              <option value="650" selected>115–200 HP (Center Console / Walkaround)</option>
+              <option value="800">225–350 HP (Offshore V6 / V8 Outboard)</option>
+              <option value="1000">Twin Outboards (High-Torque Dual Start)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="tripHours">Hours Anchored / Drifting (Engine Off)</label>
+            <div class="input-wrap">
+              <input type="number" id="tripHours" step="1" min="1" max="14" value="5">
+              <span class="input-suffix">hours</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Marine House Electronics Running with Engine Off</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.82rem; margin-top:6px;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadMfd" checked style="accent-color:#0284c7;">
+              <span>GPS Chartplotter / Fishfinder (2.5 Amps)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadStereo" checked style="accent-color:#0284c7;">
+              <span>Marine Bluetooth Stereo & Amp (5.0 Amps)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadVhf" checked style="accent-color:#0284c7;">
+              <span>VHF Marine Radio Standby (0.5 Amps)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadLivewell" checked style="accent-color:#0284c7;">
+              <span>Livewell Aerator Pump (3.5 Amps)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadLights" style="accent-color:#0284c7;">
+              <span>Cockpit / Underwater LED Lights (3.0 Amps)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="loadFridge" style="accent-color:#0284c7;">
+              <span>12V Marine Cooler / Fridge (4.0 Amps)</span>
+            </label>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Results Card -->
+      <div class="card">
+        <h2>🎯 Recommended Marine Battery Setup</h2>
+        
+        <div class="result-hero">
+          <div class="result-label">Recommended House Deep-Cycle Battery</div>
+          <div class="result-number" id="houseAh">115 Ah</div>
+          <div class="result-label" style="color:#ffffff;">Group 27 or 31 Deep-Cycle (12V)</div>
+          <div style="font-size:0.95rem; color:#bae6fd; margin-top:6px;" id="ccaSummary">Starting Battery: 650+ Marine Cranking Amps (MCA)</div>
+        </div>
+
+        <div class="sub-hero-grid">
+          <div class="sub-hero-col">
+            <div class="sub-hero-label">Total Current Draw</div>
+            <div class="sub-hero-val" id="totalAmps">11.5 Amps</div>
+            <div class="sub-hero-sub">Engine-off electronics</div>
+          </div>
+          <div class="sub-hero-col">
+            <div class="sub-hero-label">Total Amp-Hours Used</div>
+            <div class="sub-hero-val" id="usedAh">57.5 Ah</div>
+            <div class="sub-hero-sub">During 5.0 hour drift</div>
+          </div>
+        </div>
+
+        <div class="specs-grid">
+          <div class="spec-item">
+            <div class="spec-desc">Automatic Charging Relay</div>
+            <div class="spec-val">Blue Sea SI-ACR (120A)</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Dual Battery Switch</div>
+            <div class="spec-val">Off / 1 / 2 / Combine</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Starter Battery Isolation</div>
+            <div class="spec-val" style="color:#4ade80;">100% Protected from Draining</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-desc">Marine Cable Size</div>
+            <div class="spec-val">1/0 or 2/0 Tinned Copper</div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Amazon Supplies Box -->
+    <section class="supplies-card">
+      <h3>🛠️ Recommended Tools, Hardware & Building Supplies</h3>
+      <div class="supplies-grid">
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Blue Sea Systems 7650 Add-A-Battery Dual Circuit System with 120A ACR</div>
+            <div class="supply-desc">Automates dual-battery management, combining banks during charging and isolating starting battery at rest.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=blue+sea+7650+add+a+battery+kit&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">NOCO Genius GENPRO10X2 2-Bank 20A Marine Waterproof Battery Charger</div>
+            <div class="supply-desc">IP68 waterproof onboard smart charger with independent banks for starting and deep cycle AGM/Lithium.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=noco+genius+genpro10x2+marine+battery+charger&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Rule 25DA Submersible 500 GPH Automatic Marine Bilge Pump</div>
+            <div class="supply-desc">Compact computerized bilge pump senses water depth every 2.5 minutes without mechanical float switch.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=rule+automatic+marine+bilge+pump&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+        <div class="supply-item">
+          <div>
+            <div class="supply-title">Fastronix Marine Dual Battery Stud Junction Distribution Block</div>
+            <div class="supply-desc">Stainless steel 3/8-inch power distribution posts for high-amperage outboard trolling cables.</div>
+          </div>
+          <a href="https://www.amazon.com/s?k=marine+dual+battery+junction+block+stud&tag=sebiglesias-20" target="_blank" rel="nofollow noopener" class="btn-amazon">Check on Amazon →</a>
+        </div>
+      </div>
+      <p style="font-size:0.75rem; color:#94a3b8; margin-top:14px; margin-bottom:0; text-align:center;">
+        ⚖️ <em>Affiliate Notice: As an Amazon Associate, this site earns from qualifying purchases at no additional cost to you. We strictly link to trade-grade construction tools, hardware, and safety materials.</em>
+      </p>
+    </section>
+
+    <!-- FAQ Section for SEO -->
+    <section class="faq-section">
+      <h2 style="font-size:1.35rem; color:#ffffff; margin-bottom:16px;">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-q">What is an Automatic Charging Relay (ACR) on a boat?</div>
+        <div class="faq-a">An ACR connects your starting battery and house battery together automatically whenever the outboard alternator is charging (over 13.0V). When the engine is turned off and voltage drops, the ACR immediately disconnects the two banks, preventing stereos and chartplotters from ever draining your engine starting battery.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why can't I use a standard deep-cycle battery to start my outboard engine?</div>
+        <div class="faq-a">Deep-cycle batteries have thick lead plates designed for slow, continuous power over many hours. Starting an outboard engine requires an instantaneous surge of 500 to 1,000 cold cranking amps. Using a deep cycle battery for starting causes severe voltage sag and can damage sensitive outboard starter motors.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Why is marine tinned copper wire required over standard automotive wire?</div>
+        <div class="faq-a">Automotive wire uses bare copper strands. In salty humid marine air, moisture wicks beneath the insulation, turning the copper green with verdigris corrosion within months. ABYC compliant marine wire has individually electro-tinned copper strands that resist salt oxidation indefinitely.</div>
+      </div>
+    </section>
+
+    <!-- Bottom AdSense Banner -->
+    <div style="text-align:center; margin: 32px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3381238987477190"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <footer>
+      <p>© 2026 <a href="https://sebiglesias.com.ar/">sebiglesias.com.ar</a> · Boat Dual Battery & ACR Isolator Calculator — Starting vs House Bank. Educational and trade reference tool.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
